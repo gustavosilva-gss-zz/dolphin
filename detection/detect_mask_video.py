@@ -9,6 +9,7 @@ import imutils
 import time
 import cv2
 import os
+import requests
 
 def detect_and_predict_mask(frame, faceNet, maskNet):
 	# grab the dimensions of the frame and then construct a blob
@@ -88,23 +89,33 @@ maskNet.allocate_tensors()
 input_details = maskNet.get_input_details()
 output_details = maskNet.get_output_details()
 
+timesWithoutMask = 0
+
 # initialize the video stream
 print("[INFO] starting video stream...")
 vs = VideoStream(src=0).start()
 
 def recheck():
+	global timesWithoutMask
+
 	time.sleep(2)
 	frame = vs.read()
 	frame = imutils.resize(frame, width=400)
 
 	(locs, preds) = detect_and_predict_mask(frame, faceNet, maskNet)
 
-	print(preds)
+	if len(preds) == 0:
+		print("cagou aqui")
+		return
 
 	(mask, withoutMask) = preds
 
 	if mask < withoutMask:
-		print("wear your mask")
+		timesWithoutMask += 1
+		
+		if timesWithoutMask == 2:
+			response = requests.post("http://192.168.100.8:4001/infringement")
+			print(response)
 
 # loop over the frames from the video stream
 while True:
@@ -133,6 +144,9 @@ while True:
 		#for no false negative, check after two seconds if they are actually not wearing the mask
 		if mask < withoutMask:
 			recheck()
+		else:
+			response = requests.post("http://192.168.100.8:4001/stable")
+			timesWithoutMask = 0
 
 		# include the probability in the label
 		label = "{}: {:.2f}%".format(label, max(mask, withoutMask) * 100)
