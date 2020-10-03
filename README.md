@@ -1,4 +1,3 @@
 face mask detection
 
-TODO: 
-most
+Create a MongoDB locally: https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
