@@ -16,4 +16,4 @@
 
 6. In the `web/` directory, go to `client/` and start the React app with `npm start`
 
-###### The software is not complete yet. Still, if you have to talk to me, send an email to gustvao24gss@gmail.com or dm at @MarmotaDesigual (Twitter)
+###### The software is not complete yet. Still, if you have to talk to me, send an email to gustavo24gss@gmail.com or dm at @MarmotaDesigual (Twitter)
