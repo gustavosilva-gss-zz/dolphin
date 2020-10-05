@@ -1,8 +1,8 @@
-#Dolphin: cheap mask detection
+# Dolphin: cheap mask detection
 
-###Warning: the following instructions have only been tested on linux, more especifically Pop_OS!
+### Warning: the following instructions have only been tested on linux, more especifically Pop_OS!
 
-#####I'm just going to list the basic of making this run, to install Node, React, Python and making Tensorflow run on the Raspberry Pi you can find plenty of tutorials online
+##### I'm just going to list the basic of making this run, to install Node, React, Python and making Tensorflow run on the Raspberry Pi you can find plenty of tutorials online
 
 1. clone this repository with `git clone https://github.com/gustavosilva-gss/dolphin.git`
 
@@ -15,3 +15,5 @@
 5. Go to the `web/` directory and start the Node server with `node app.js`
 
 6. In the `web/` directory, go to `client/` and start the React app with `npm start`
+
+###### The software is not complete yet. Still, if you have to talk to me, send an email to gustvao24gss@gmail.com or dm at @MarmotaDesigual (Twitter)
