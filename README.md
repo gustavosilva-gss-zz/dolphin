@@ -1,6 +1,6 @@
 # Dolphin: cheap mask detection
 
-### Warning: the following instructions have only been tested on linux, more especifically Pop_OS!
+### Warning: the following instructions have only been tested on linux, more especifically Pop!_OS
 
 ##### I'm just going to list the basic of making this run, to install Node, React, Python and making Tensorflow run on the Raspberry Pi you can find plenty of tutorials online
 
