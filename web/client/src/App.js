@@ -1,8 +1,8 @@
 import React from "react";
 import socketIOClient from "socket.io-client";
 
-import Status from './status.js';
-import Logs from './logs.js';
+import Status from './Status.js';
+import Logs from './Logs.js';
 
 function App() {
   const socket = socketIOClient("http://192.168.100.12:4001");
@@ -10,7 +10,7 @@ function App() {
   return (
     <>
       <Status socket={socket} />
-      <Logs />
+      <Logs socket={socket} />
     </>
   );
 }

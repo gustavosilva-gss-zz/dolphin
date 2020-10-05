@@ -1,5 +1,4 @@
 import React from "react";
-import socketIOClient from "socket.io-client";
 
 class Status extends React.Component {
   constructor() {
