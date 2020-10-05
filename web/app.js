@@ -1,3 +1,5 @@
+require('dotenv').config({ path: __dirname + '../.env' });
+
 const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
@@ -14,21 +16,21 @@ const server = http.createServer(app);
 
 const io = socketIo(server);
 
-mongo.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
-  if (err) throw err;
-
-  const db = client.db("dolphin");
-
-  const logs = db.collection('logs');
-
-  logs.find().toArray((err, items) => {
-    console.log(new Date(items[0]["duration"]).getTime() / 1000);
-    console.log(new Date(items[0]["timestamp"]));
-  });
-});
-
 io.on("connection", (socket) => {
   console.log("New client connected");
+
+  mongo.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
+    if (err) throw err;
+  
+    const db = client.db("dolphin");
+  
+    const logs = db.collection('logs');
+  
+    logs.find({}).toArray((err, result) => {
+      //send all logs to frontend with websocket
+      io.sockets.emit("newLog", result.reverse());
+    });
+  });
 
   socket.on("disconnect", () => {
     console.log("Client disconnected");
@@ -40,7 +42,7 @@ let stableTime;
 
 app.post("/infringement", (req, res) => {
   infringementTime = new Date().getTime();
-  
+
   io.sockets.emit("infringement");
   res.sendStatus(202);
 });
@@ -52,7 +54,7 @@ app.post("/stable", (req, res) => {
     // means the user put back the mask
     logInfringement();
   }
-  
+
   io.sockets.emit("stable");
   res.sendStatus(202);
 });
@@ -60,9 +62,9 @@ app.post("/stable", (req, res) => {
 function logInfringement() {
   //dont forget to start mongo before
   //sudo service mongod start
-  mongo.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
+  mongo.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
     if (err) throw err;
-  
+
     const db = client.db("dolphin");
 
     const logs = db.collection('logs');
@@ -75,12 +77,11 @@ function logInfringement() {
     logs.insertOne(log, (err, result) => {
       if (err) throw err;
 
-      //send to frontend with websocket
-      io.sockets.emit("newLog", log);
+      logs.find({}).toArray((err, result) => io.sockets.emit("newLog", result.reverse()));
 
       infringementTime = null;
     });
-  
+
   });
 }
 
