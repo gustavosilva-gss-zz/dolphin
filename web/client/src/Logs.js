@@ -36,7 +36,15 @@ class Logs extends React.Component {
             },
         ];
 
+        let aa = [];
+
+        for (let e of data) {
+            aa.push(<img src={`data:image/jpeg;base64,${e["image"]}`} />)
+        }
+
         return (
+            <>
+            {aa}
             <MaterialTable
                 title="Infringement Logs"
                 data={data}
@@ -47,6 +55,7 @@ class Logs extends React.Component {
                     exportButton: true
                 }}
             />
+            </>
         );
     };
 }
