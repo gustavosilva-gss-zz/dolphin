@@ -105,7 +105,7 @@ def recheck():
 	(locs, preds) = detect_and_predict_mask(frame, faceNet, maskNet)
 
 	if len(preds) == 0:
-		print("cagou aqui")
+		print("something went wrong")
 		return
 
 	(mask, withoutMask) = preds
@@ -114,7 +114,10 @@ def recheck():
 		timesWithoutMask += 1
 		
 		if timesWithoutMask == 2:
-			response = requests.post("http://192.168.100.8:4001/infringement")
+			imencoded = cv2.imencode(".jpg", frame)[1]
+			file = {'file': ('image.jpg', imencoded.tostring(), 'image/jpeg', {'expires': 0})}
+			response = requests.post("http://192.168.100.8:4001/infringement", files=file)
+
 			print(response)
 
 # loop over the frames from the video stream

@@ -1,8 +1,9 @@
-require('dotenv').config({ path: __dirname + '../.env' });
-
 const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
+const multer = require("multer");
+
+const upload = multer();
 
 const mongo = require('mongodb').MongoClient;
 
@@ -39,9 +40,12 @@ io.on("connection", (socket) => {
 
 let infringementTime;
 let stableTime;
+let image;
 
-app.post("/infringement", (req, res) => {
+app.post("/infringement", upload.single('file'), (req, res) => {
   infringementTime = new Date().getTime();
+
+  image = req.file.buffer;
 
   io.sockets.emit("infringement");
   res.sendStatus(202);
@@ -71,7 +75,8 @@ function logInfringement() {
 
     const log = {
       timestamp: new Date().getTime(),
-      duration: stableTime - infringementTime
+      duration: stableTime - infringementTime,
+      image: image
     };
 
     logs.insertOne(log, (err, result) => {
@@ -85,4 +90,4 @@ function logInfringement() {
   });
 }
 
-server.listen(4001, '192.168.100.12');
+server.listen(4001, '192.168.100.8');
