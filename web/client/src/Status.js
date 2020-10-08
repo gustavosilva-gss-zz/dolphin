@@ -28,7 +28,7 @@ class Status extends React.Component {
     }
 
     return (
-      <div style={styles}>{masked ? 'parabens' : 'bota mascara mane'}</div>
+      <div style={styles}><h3>{masked ? 'stable' : 'infringement currently happening'}</h3></div>
     );
   }
 }
