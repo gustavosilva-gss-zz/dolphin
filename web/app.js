@@ -64,6 +64,9 @@ app.post("/stable", (req, res) => {
 });
 
 function logInfringement() {
+  let duration = stableTime - infringementTime;
+  infringementTime = null;
+
   //dont forget to start mongo before
   //sudo service mongod start
   mongo.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
@@ -75,7 +78,7 @@ function logInfringement() {
 
     const log = {
       timestamp: new Date().getTime(),
-      duration: stableTime - infringementTime,
+      duration: duration,
       image: image
     };
 
@@ -83,8 +86,6 @@ function logInfringement() {
       if (err) throw err;
 
       logs.find({}).toArray((err, result) => io.sockets.emit("newLog", result.reverse()));
-
-      infringementTime = null;
     });
 
   });

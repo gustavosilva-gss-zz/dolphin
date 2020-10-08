@@ -5,7 +5,7 @@ class Logs extends React.Component {
     constructor() {
         super();
         this.state = {
-            data: []
+            data: [],
         };
     }
 
@@ -34,27 +34,43 @@ class Logs extends React.Component {
                 title: "Duration",
                 field: "duration",
             },
+            {
+                title: "Image",
+                filed: "image",
+                render: rowData => <img src={`data:image/jpeg;base64,${rowData.image}`} style={{ width: 100 }} />
+            }
         ];
-
-        let aa = [];
-
-        for (let e of data) {
-            aa.push(<img src={`data:image/jpeg;base64,${e["image"]}`} />)
-        }
 
         return (
             <>
-            {aa}
-            <MaterialTable
-                title="Infringement Logs"
-                data={data}
-                columns={columns}
-                options={{
-                    search: true,
-                    paging: false,
-                    exportButton: true
-                }}
-            />
+                <MaterialTable
+                    title="Infringement Logs"
+                    data={data}
+                    columns={columns}
+                    options={{
+                        search: true,
+                        paging: false,
+                        exportButton: true
+                    }}
+                    onRowClick={(event, rowData, togglePanel) => togglePanel()}
+                    detailPanel={[
+                        {
+                            tooltip: 'Show Image',
+                            render: rowData => {
+                                return (
+                                    <div
+                                        style={{
+                                            width: '100%',
+                                            height: '25%'
+                                        }}
+                                    >
+                                        <img src={`data:image/jpeg;base64,${rowData.image}`} />
+                                    </div>
+                                )
+                            },
+                        },
+                    ]}
+                />
             </>
         );
     };
